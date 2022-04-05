@@ -5,7 +5,7 @@ import { getLinePoints, getMovableNodeRatio, setRatio, setXYCordinatesOfNodeBase
 import useGeometrics from "../customHooks/useGeometrics";
 
 const ButtonComponent = () => {
-    const linePoints = useSelector( getLinePoints )
+    const linePoints = useSelector(getLinePoints)
     // const { distanceBetween2Points, getLineAngle, getTranslatePoint } = useGeometrics();
     // const dispatch = useDispatch()
     // const linePoints = useSelector(getLinePoints);
@@ -23,9 +23,9 @@ const ButtonComponent = () => {
     let y = linePoints.y;
     let x2 = linePoints.x2;
     let y2 = linePoints.y2;
-    let c = Math.abs( x1 - x )
-    let f = Math.abs( x - x2 )
-    console.log( "k", c, f )
+    let c = Math.abs(x1 - x)
+    let f = Math.abs(x - x2)
+    // console.log("k", c, f)
     return (
         <div
             style={{
@@ -34,26 +34,26 @@ const ButtonComponent = () => {
             }}>
             <div className='d-flex flex-direction-row justify-content-between'>
                 <Button className="ms-2 bg-danger"
-                >x1: { x1 }</Button>   
+                >x1: {x1}</Button>
                 <Button className="ms-2 bg-danger"
                 >
-                    y1: { y1 }</Button>
+                    y1: {y1}</Button>
                 <Button className="ms-2 bg-success"
                 >
-                    x: { x }</Button>
+                    x: {x}</Button>
                 <Button className="ms-2 bg-success"
-                >y: { y }</Button>
+                >y: {y}</Button>
                 <Button className="ms-2 bg-dark"
                 >
-                    x2: { x2 }</Button>
+                    x2: {x2}</Button>
                 <Button className="ms-2 bg-dark"
-                >y2: { y2 }</Button>
+                >y2: {y2}</Button>
                 <Button className="ms-2"
-                >Ratio between Two lines is { c / f }</Button>
+                >Ratio between Two lines is {c / f}</Button>
                 <Button className="ms-2"
-                >a Value { c }</Button>
+                >a Value {c}</Button>
                 <Button className="ms-2"
-                >b Value { f }</Button>
+                >b Value {f}</Button>
             </div>
         </div>
 
