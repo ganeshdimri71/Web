@@ -2,7 +2,6 @@
 const useGeometrics = () => {
     const geometric = require( "geometric" );
     const distanceBetween2Points = ( node1, node2 ) => {
-        console.log( node1, node2 )
         if ( node1 && node2 ) return geometric.lineLength( [ node1, node2 ] );
     }
 
@@ -47,57 +46,7 @@ const useGeometrics = () => {
         return result;
     }
 
-
-    const getShapeExtremesFromModel = ( modelClone, shapeKey ) => {
-        let leftestX = null;
-        let toppestY = null;
-        let rightestX = null;
-        let bottomestY = null;
-        modelClone.shapes[ shapeKey ].forEach( ( nodeKey ) => {
-            const node = modelClone.nodes[ nodeKey ];
-            const newExtremes = getNewExtremesFromNodeAndOldExtremes( [ leftestX, toppestY, rightestX, bottomestY ], [ node[ 0 ], node[ 1 ] ] );
-            leftestX = newExtremes[ 0 ];
-            toppestY = newExtremes[ 1 ];
-            rightestX = newExtremes[ 2 ];
-            bottomestY = newExtremes[ 3 ];
-        } );
-        return [ leftestX, toppestY, rightestX, bottomestY ];
-    }
-
-    const getNewExtremesFromNodeAndOldExtremes = ( oldExtremes, coords ) => {
-        let leftestX = oldExtremes[ 0 ];
-        let toppestY = oldExtremes[ 1 ];
-        let rightestX = oldExtremes[ 2 ];
-        let bottomestY = oldExtremes[ 3 ];
-        if ( !leftestX )
-            leftestX = coords[ 0 ];
-        else {
-            if ( coords[ 0 ] < leftestX )
-                leftestX = coords[ 0 ];
-        }
-        if ( !toppestY )
-            toppestY = coords[ 1 ];
-        else {
-            if ( coords[ 1 ] < toppestY )
-                toppestY = coords[ 1 ];
-        }
-        if ( !rightestX )
-            rightestX = coords[ 0 ];
-        else {
-            if ( coords[ 0 ] > rightestX )
-                rightestX = coords[ 0 ];
-        }
-        if ( !bottomestY )
-            bottomestY = coords[ 1 ];
-        else {
-            if ( coords[ 1 ] > bottomestY )
-                bottomestY = coords[ 1 ];
-        }
-        return [ leftestX, toppestY, rightestX, bottomestY ];
-    }
-
-
-    return { distanceBetween2Points, getLineAngle, getTranslatePoint, pathMidPoint, getRotatedVector, matrixTimesVector, getScaledVector, getDisplacedVector, getShapeExtremesFromModel, getNewExtremesFromNodeAndOldExtremes };
+    return { distanceBetween2Points, getLineAngle, getTranslatePoint };
 
 }
 

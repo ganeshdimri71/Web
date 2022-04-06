@@ -10,229 +10,152 @@ import {
   setXYCordinatesOfNodeA,
   setXYCordinatesOfNodeB,
   setXYCordinatesOfNodeC,
-  getLinePoints, setXYCordinatesOfNodeBBasedOnOffset, getMovableLineYCordinate, setYcordinateOfMovableNode, setRatio, setXYCordinatesOfNodeBAgain
+  getLinePoints, setXYCordinatesOfNodeBBasedOnOffset, setYcordinateOfMovableNode, setRatio, setXYCordinatesOfNodeBAgain, getMovableNodeRatio, setRatios, getAngle
 } from "../src/features/movableNodesSlice";
 import ButtonComponent from './components/ButtonComponent'
 import useGeometrics from "./customHooks/useGeometrics";
 // import { transformVectorMaintainingProportions } from './customHooks/useMovableNodesPoints'
 
 const App = () => {
-  const geometric = require("geometric");
-  const { distanceBetween2Points, getLineAngle, getTranslatePoint } = useGeometrics();
-  const linePoints = useSelector(getLinePoints);
-  const getMovableLineYCordinateFromRedux = useSelector(getMovableLineYCordinate);
+  const geometric = require( "geometric" );
+  const [ inXCoOfMvNode, setInXCoOfMvNode ] = useState()
+  const [ inYCoOfMvNode, setInYCoOfMvNode ] = useState()
+  const [ initialRender, setInitialRender ] = useState( 0 )
+  const [ arrayOfMovableNodes, setArrayOfMovableNodes ] = useState( [] )
+  const [ dragStartPos, setDragStartPos ] = useState( [ 0, 0 ] )
   const dispatch = useDispatch()
-  const [dragStartPos, setDragStartPos] = useState([0, 0])
-  const [cordinatesOfGreenPoints, setCordinatesOfGreenPoints] = useState([])
+  const linePoints = useSelector( getLinePoints );
+  const ratios = useSelector( getMovableNodeRatio );
+  const angle = useSelector( getAngle );
+  const { distanceBetween2Points, getLineAngle, getTranslatePoint } = useGeometrics();
+
   const a = distanceBetween2Points([linePoints.x1, linePoints.y1], [linePoints.x1, linePoints.y]) / 15
   const b = distanceBetween2Points([linePoints.x1, linePoints.y], [linePoints.x, linePoints.y]) / 15
   const c = Math.sqrt(a * a + b * b)
   const d = distanceBetween2Points([linePoints.x2, linePoints.y2], [linePoints.x2, linePoints.y]) / 15
   const e = distanceBetween2Points([linePoints.x, linePoints.y], [linePoints.x2, linePoints.y]) / 15
   const f = Math.sqrt(d * d + e * e)
-  const [ratioBetweenTwoLines, setRatioBetweenTwoLines] = useState((c / f));
-  const [angleByFunc, setAngleByFunc] = useState()
-
-  // const transformVectorMaintainingProportions = (movedVector, toTransformVector, endVector, offset) => {
-  //   const diffVector = [movedVector[0] - endVector[0], movedVector[1] - endVector[1]];
-  //   let diffMovableVector = [toTransformVector[0] - endVector[0], toTransformVector[1] - endVector[1]];
-
-  //   const newDiffVector = [diffVector[0] + offset[0], diffVector[1] + offset[1]];
-  //   const angle = getLineAngle([newDiffVector, [0, 0]]) - getLineAngle([diffVector, [0, 0]]);
-
-  //   const diffVectorRotated = geometric.pointRotate(diffVector, angle);
-  //   const scale = geometric.lineLength([newDiffVector, [0, 0]]) / geometric.lineLength([diffVectorRotated, [0, 0]]);
-
-  //   diffMovableVector = geometric.pointRotate(diffMovableVector, angle);
-  //   diffMovableVector = [diffMovableVector[0] scale, diffMovableVector[1] scale];
-  //   return [diffMovableVector[0] + endVector[0], diffMovableVector[1] + endVector[1]];
-  // }
-
-
-
-  const dragStartRed = (e) => {
-    const { x, y } = e.target.getStage().getPointerPosition();
-    setCordinatesOfGreenPoints([linePoints.x, linePoints.y])
-    setDragStartPos([x, y]);
-    dispatch(
-      setXYCordinatesOfNodeA({
-        xPos: x,
-        yPos: y,
-      })
-    );
-    // dispatch(
-    //   setXYCordinatesOfNodeBBasedOnOffset()
-    // );
-  };
-
-
-  const PI = 3.14159265;
-
-  // Function to find the
-  // angle between two lines
-  function findAngle(M1, M2) {
-    // Store the tan value of the angle
-    var angle = Math.abs((M2 - M1) / (1 + M1 * M2));
-
-    // Calculate tan inverse of the angle
-    var ret = Math.atan(angle);
-
-    // Convert the angle from
-    // radian to degree
-    var val = (ret * 180) / PI;
-
-    // Print the result
-    // document.write( val.toFixed( 4 ) );
-    return val
-  }
-
-  // Driver Code
-  var M1 = 300,
-    M2 = 400;
-  const angle = findAngle(M1, M2);
-  // console.log("angle", angle)
-
-  function calcangle(x00, y00, x01, y01, x10, y10, x11, y11) {
+  function calcangle ( x00, y00, x01, y01, x10, y10, x11, y11 ) {
     var dx0 = x01 - x00;
     var dy0 = y01 - y00;
     var dx1 = x11 - x10;
     var dy1 = y11 - y10;
-    var angle = Math.atan2(dx0 * dy1 - dx1 * dy0, dx0 * dx1 + dy0 * dy1);
-    // writeln(angle);
-    // writeln(angle * 180 / 3.1415926);
-    var angleInDegree = Math.abs(angle * 180 / 3.1415926);
-    console.log('angleInDegree', angleInDegree)
-    setAngleByFunc(angleInDegree)
-    // return angleInDegree
+    var angle = Math.atan2( dx0 * dy1 - dx1 * dy0, dx0 * dx1 + dy0 * dy1 );
+    var angleInDegree = Math.abs( angle * 180 / 3.1415926 );
+    // console.log( 'angleInDegree', angleInDegree )
+    return angleInDegree
   }
-  // let angleInDegree = calcangle(linePoints.x1, linePoints.y1, linePoints.x, linePoints.y, linePoints.x, linePoints.y, linePoints.x2, linePoints.y2);
-  // console.log('angleInDegree', angleInDegree)
+  function section ( x1, x2, y1, y2, m, n ) {
+    // Applying section formula
+    let x = ( ( n * x1 ) + ( m * x2 ) ) /
+      ( m + n );
+    let y = ( ( n * y1 ) + ( m * y2 ) ) /
+      ( m + n );
+    return [ x, y ]
 
 
-  const dragMoveRed = (e) => {
-
-    // console.log('offset_y', offset_y)
-    const { x, y } = e.target.getStage().getPointerPosition();
-    const offset_y = (y - dragStartPos[1])
-    const offset_x = (x - dragStartPos[0])
-    // const pointsOfMovableNodesFromExternalFile = transformVectorMaintainingProportions([linePoints.x1, linePoints.y1], [linePoints.x, linePoints.y], [linePoints.x2, linePoints.y2], [offset_x, offset_y])
-    // console.log('pointsOfMovableNodesFromExternalFile', pointsOfMovableNodesFromExternalFile)
-
-    dispatch(
-      setXYCordinatesOfNodeA({
-        xPos: x,
-        yPos: y,
-      })
-    );
-    // dispatch(
-    //   setXYCordinatesOfNodeBBasedOnOffset(
-    //     {
-    //       xPointsOfMovableNodes: pointsOfMovableNodesFromExternalFile[0],
-    //       yPointsOfMovableNodes: pointsOfMovableNodesFromExternalFile[1]
-    //     }
-    //   )
-    // );
-    dispatch(
-      setXYCordinatesOfNodeBBasedOnOffset()
-    );
-    // console.log('linePoints.x,linePoints.y', linePoints.x, linePoints.y)
-    const angle = findAngle(M1, M2)
-    // console.log('angle', angle)
-    console.log('angleByFunc', angleByFunc)
-    const pointsRotation = geometric.pointRotate([linePoints.x, linePoints.y], angleByFunc, [linePoints.x, linePoints.y])
-    console.log('pointsRotation', pointsRotation)
-    dispatch(
-      setXYCordinatesOfNodeBAgain({
-        xPointsOfMovableNodes: pointsRotation[0],
-        yPointsOfMovableNodes: pointsRotation[1]
-      })
-    );
-    // dispatch(
-    //   setXYCordinatesOfNodeBAgain({
-
-    //   })
-    // );
-
-  };
-
-  const dragEndRed = (e) => {
-    const { x, y } = e.target.getStage().getPointerPosition();
-
-    const YcordinateOfMovableNodes = getMovableLineYCordinateFromRedux
-    dispatch(
-      setXYCordinatesOfNodeA({
-        xPos: x,
-        yPos: y,
-      })
-    );
-    // dispatch(
-    //   setXYCordinatesOfNodeA({
-    //     // xPos: x,
-    //     // yPos: y,
-    //     xPointsOfMovableNodes: linePoints.x,
-    //     yPointsOfMovableNodes: linePoints.y
-    //   })
-    // );
-    // dispatch(
-    //   setYcordinateOfMovableNode( {
-    //     YcordinateOfMovableNodes: YcordinateOfMovableNodes
-    //   } )
-    // );
+    // Printing result
+    document.write( "(" + x + ", " + y + ")" );
   }
-  // const dragStartGreen = () => {
-
-  // }
-  const dragStartMoveEndGreen = (e) => {
-    const { x, y } = e.target.getStage().getPointerPosition();
-    dispatch(
-      setXYCordinatesOfNodeB({
-        xPos: x,
-        yPos: y,
-      })
-    );
-    setRatioBetweenTwoLines(c / f)
-    dispatch(setRatio(
-      { ratioBetweenTwoLines: ratioBetweenTwoLines }
-    ))
-  };
-  const dragStartBlack = (e) => {
-    const { x, y } = e.target.getStage().getPointerPosition();
-    setDragStartPos([x, y]);
-    dispatch(
-      setXYCordinatesOfNodeC({
-        xPos: x,
-        yPos: y,
-      })
-    );
-  };
-  const dragMoveBlack = (e) => {
-    const { x, y } = e.target.getStage().getPointerPosition();
-    const offset_y = (y - dragStartPos[1])
-    dispatch(
-      setXYCordinatesOfNodeC({
-        xPos: x,
-        yPos: y,
-      })
-    );
-    dispatch(
-      setXYCordinatesOfNodeBBasedOnOffset()
-    );
-  };
-  const dragEndBlack = (e) => {
-    const { x, y } = e.target.getStage().getPointerPosition();
-    const YcordinateOfMovableNodes = getMovableLineYCordinateFromRedux
-    dispatch(
-      setXYCordinatesOfNodeC({
-        xPos: x,
-        yPos: y,
-      })
-    );
-    dispatch(
-      setYcordinateOfMovableNode({
-        YcordinateOfMovableNodes: YcordinateOfMovableNodes
-      })
-    );
+  const getAngleOfLine = ( line ) => {
+    let angle = geometric.lineAngle( line );
+    if ( angle < 0 )
+      angle += 360;
+    return angle;
   }
+  const transformVectorMaintainingProportions = ( movedVector, toTransformVector, endVector, offset ) => {
+    const diffVector = [ movedVector[ 0 ] - endVector[ 0 ], movedVector[ 1 ] - endVector[ 1 ] ];
+    let diffMovableVector = [ toTransformVector[ 0 ] - endVector[ 0 ], toTransformVector[ 1 ] - endVector[ 1 ] ];
+
+    const newDiffVector = [ diffVector[ 0 ] + offset[ 0 ], diffVector[ 1 ] + offset[ 1 ] ];
+    const angle = getAngleOfLine( [ newDiffVector, [ 0, 0 ] ] ) - getAngleOfLine( [ diffVector, [ 0, 0 ] ] );
+
+    const diffVectorRotated = geometric.pointRotate( diffVector, angle );
+    const scale = geometric.lineLength( [ newDiffVector, [ 0, 0 ] ] ) / geometric.lineLength( [ diffVectorRotated, [ 0, 0 ] ] );
+
+    diffMovableVector = geometric.pointRotate( diffMovableVector, angle );
+    diffMovableVector = [ diffMovableVector[ 0 ] * scale, diffMovableVector[ 1 ] * scale ];
+    return [ diffMovableVector[ 0 ] + endVector[ 0 ], diffMovableVector[ 1 ] + endVector[ 1 ] ];
+  }
+  // console.log( ' inXCoOfMvNode: inXCoOfMvNode, inYCoOfMvNode: inYCoOfMvNode', inXCoOfMvNode, inYCoOfMvNode )
+  const nodeDragStart = ( e, color ) => {
+    const x = e.target.x();
+    const y = e.target.y();
+    setDragStartPos( [ x, y ] )
+    if ( color == 'red' ) {
+      dispatch( setXYCordinatesOfNodeA( { xPos: x, yPos: y, } ) );
+      dispatch( setXYCordinatesOfNodeB( { xPos: linePoints.x, yPos: linePoints.y } ) )
+    }
+    else if ( color == 'black' ) dispatch( setXYCordinatesOfNodeC( { xPos: x, yPos: y, } ) )
+  };
+
+  const nodeDragMove = ( e, color ) => {
+    // setArrayOfMovableNodes( [ ...arrayOfMovableNodes, { x: linePoints.x, y: linePoints.y } ] )
+    // console.log( 'arrayOfMovableNodes', arrayOfMovableNodes )
+    const x = e.target.x();
+    const y = e.target.y();
+    const offset_y = ( y - dragStartPos[ 1 ] )
+    const offset_x = ( x - dragStartPos[ 0 ] )
+    if ( color == 'red' ) {
+      // const XandYCordinatesOfMovableNodes = transformVectorMaintainingProportions( [ linePoints.x1, linePoints.y1 ], [ linePoints.x, linePoints.y ], [ linePoints.x2, linePoints.y2 ], [ offset_x, offset_y ] )
+      // console.log( 'XandYCordinatesOfMovableNodes', XandYCordinatesOfMovableNodes )
+      console.log( 'angle', angle )
+      // console.log( 'm1,m2', ratios.m1, ratios.m2 )
+      dispatch( setXYCordinatesOfNodeA( { xPos: x, yPos: y, } ) )
+      // dispatch( setXYCordinatesOfNodeBAgain( { xPointsOfMovableNodes: XandYCordinatesOfMovableNodes[ 0 ], yPointsOfMovableNodes: XandYCordinatesOfMovableNodes[ 1 ], inXCoOfMvNode: 0, inYCoOfMvNode: 0 } ) );
+      console.log( 'linePoints.x,linePoints.y', linePoints.x, linePoints.y )
+      const xCoOfMoNode = ( linePoints.x2 * ratios.m1 + linePoints.x1 * ratios.m2 ) / ( ratios.m1 + ratios.m2 )
+      const yCoOfMoNode = ( linePoints.y2 * ratios.m1 + linePoints.y1 * ratios.m2 ) / ( ratios.m1 + ratios.m2 )
+      // // const jerkPoints = section( linePoints.x1, linePoints.x2, linePoints.y1, linePoints.y2, ratios.m1, ratios.m2 )
+      const pointsRotation = geometric.pointRotate( [ xCoOfMoNode, yCoOfMoNode ], angle, [ linePoints.x1, linePoints.y1 ] )
+      // dispatch( setXYCordinatesOfNodeBAgain( { xPointsOfMovableNodes: pointsRotation[ 0 ], yPointsOfMovableNodes: pointsRotation[ 1 ] } ) )
+      if ( initialRender == 0 ) {
+        dispatch( setXYCordinatesOfNodeBAgain( {
+          xPointsOfMovableNodes: pointsRotation[ 0 ], yPointsOfMovableNodes: pointsRotation[ 1 ], inXCoOfMvNode: 13, inYCoOfMvNode: 35
+        } ) )
+      }
+      else dispatch( setXYCordinatesOfNodeBAgain( { xPointsOfMovableNodes: pointsRotation[ 0 ], yPointsOfMovableNodes: pointsRotation[ 1 ], inXCoOfMvNode: 13, inYCoOfMvNode: 35 } ) );
+      // dispatch( setXYCordinatesOfNodeBAgain( { xPointsOfMovableNodes: XandYCordinatesOfMovableNodes[ 0 ], yPointsOfMovableNodes: XandYCordinatesOfMovableNodes[ 1 ], inXCoOfMvNode: 0, inYCoOfMvNode: 0 } ) );
+      setInitialRender( prevState => prevState + 1 )
+      // dispatch( setXYCordinatesOfNodeBBasedOnOffset() );
+    } else if ( color == 'black' ) {
+      dispatch( setXYCordinatesOfNodeC( { xPos: x, yPos: y, } ) );
+      const xCoOfMoNode = ( linePoints.x2 * ratios.m1 + linePoints.x1 * ratios.m2 ) / ( ratios.m1 + ratios.m2 )
+      const yCoOfMoNode = ( linePoints.y2 * ratios.m1 + linePoints.y1 * ratios.m2 ) / ( ratios.m1 + ratios.m2 )
+      const pointsRotation = geometric.pointRotate( [ xCoOfMoNode, yCoOfMoNode ], angle, [ linePoints.x1, linePoints.y1 ] )
+      dispatch( setXYCordinatesOfNodeBAgain( { xPointsOfMovableNodes: pointsRotation[ 0 ], yPointsOfMovableNodes: pointsRotation[ 1 ] } ) );
+      // dispatch( setXYCordinatesOfNodeBBasedOnOffset() );
+    }
+  };
+
+  const nodeDragEnd = ( e, color ) => {
+    const x = e.target.x();
+    const y = e.target.y();
+    if ( color === 'red' ) dispatch( setXYCordinatesOfNodeA( { xPos: x, yPos: y, } ) );
+    else if ( color == 'black' ) dispatch( setXYCordinatesOfNodeC( { xPos: x, yPos: y, } ) );
+  }
+
+  const nodeStartMoveEnd = ( e, position ) => {
+    const x = e.target.x();
+    const y = e.target.y();
+    dispatch(
+      setXYCordinatesOfNodeB( {
+        xPos: x,
+        yPos: y,
+      } )
+    );
+    if ( position === 'move' ) {
+      let m1 = Math.abs( linePoints.x1 - linePoints.x )
+      let m2 = Math.abs( linePoints.x - linePoints.x2 )
+      // console.log( 'm1,m2', m1, m2 )
+      const angle = calcangle( linePoints.x1, linePoints.y1, linePoints.x, linePoints.y, linePoints.x, linePoints.y, linePoints.x2, linePoints.y2 )
+      const ratio = Math.abs( m1 / m2 )
+      dispatch( setRatios( { m1: m1, m2: m2, ratio: ratio, angle: angle } ) )
+    }
+  };
+
+
+
 
 
   return (
@@ -253,6 +176,8 @@ const App = () => {
                       linePoints.y1,
                       linePoints.x,
                       linePoints.y
+                      // ( linePoints.x2 * ratios.m1 + linePoints.x1 * ratios.m2 ) / ( ratios.m1 + ratios.m2 ),
+                      // ( linePoints.y2 * ratios.m1 + linePoints.y1 * ratios.m2 ) / ( ratios.m1 + ratios.m2 )
                     ]}
                     stroke="#777777"
                     strokeWidth={2}
@@ -261,6 +186,8 @@ const App = () => {
                     points={[
                       linePoints.x,
                       linePoints.y,
+                      // ( linePoints.x2 * ratios.m1 + linePoints.x1 * ratios.m2 ) / ( ratios.m1 + ratios.m2 ),
+                      // ( linePoints.y2 * ratios.m1 + linePoints.y1 * ratios.m2 ) / ( ratios.m1 + ratios.m2 ),
                       linePoints.x2,
                       linePoints.y2,
                     ]}
@@ -273,23 +200,21 @@ const App = () => {
                     radius={10}
                     fill="red"
                     draggable
-                    onDragStart={(e) => {
-                      dragStartRed(e)
-                    }}
-                    onDragMove={(e) => {
-                      dragMoveRed(e)
-                    }}
-                    onDragEnd={(e) => dragEndRed(e)}
+                    onDragStart={ ( e ) => nodeDragStart( e, 'red' ) }
+                    onDragMove={ ( e ) => nodeDragMove( e, 'red' ) }
+                    onDragEnd={ ( e ) => nodeDragEnd( e, 'red' ) }
                   />
                   <Circle
-                    x={linePoints.x}
-                    y={linePoints.y}
+                    // x={ ( linePoints.x2 * ratios.m1 + linePoints.x1 * ratios.m2 ) / ( ratios.m1 + ratios.m2 ) }
+                    // y={ ( linePoints.y2 * ratios.m1 + linePoints.y1 * ratios.m2 ) / ( ratios.m1 + ratios.m2 ) }
+                    x={ linePoints.x }
+                    y={ linePoints.y }
                     radius={10}
                     fill="green"
                     draggable
-                    onDragStart={(e) => dragStartMoveEndGreen(e)}
-                    onDragMove={(e) => dragStartMoveEndGreen(e)}
-                    onDragEnd={(e) => dragStartMoveEndGreen(e)}
+                    onDragStart={ ( e ) => nodeStartMoveEnd( e ) }
+                    onDragMove={ ( e ) => nodeStartMoveEnd( e, 'move' ) }
+                    onDragEnd={ ( e ) => nodeStartMoveEnd( e ) }
                   />
                   <Circle
                     x={linePoints.x2}
@@ -297,14 +222,9 @@ const App = () => {
                     radius={10}
                     fill="black"
                     draggable
-                    onDragStart={(e) => {
-                      dragStartBlack(e)
-
-                    }}
-                    onDragMove={(e) => {
-                      dragMoveBlack(e)
-                    }}
-                    onDragEnd={(e) => dragEndBlack(e)}
+                    onDragStart={ ( e ) => nodeDragStart( e, 'black' ) }
+                    onDragMove={ ( e ) => nodeDragMove( e, 'black' ) }
+                    onDragEnd={ ( e ) => nodeDragEnd( e, 'black' ) }
                   />
                 </Group>
               </Layer>
@@ -313,13 +233,6 @@ const App = () => {
         )}
       </ReactReduxContext.Consumer>
       <ButtonComponent />
-      <button
-        style={{
-          position: 'absolute',
-          top: '40px'
-        }}
-        onClick={() => { calcangle(linePoints.x1, linePoints.y1, linePoints.x, linePoints.y, linePoints.x, linePoints.y, linePoints.x2, linePoints.y2) }}
-      >Click Me For Angle</button>
     </>
   );
 };

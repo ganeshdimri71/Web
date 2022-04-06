@@ -1,11 +1,12 @@
 import React from 'react'
 import { Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { getLinePoints, getMovableNodeRatio, setRatio, setXYCordinatesOfNodeBasedOnCordinate, getMovableLineYCordinate } from '../features/movableNodesSlice'
+import { getLinePoints, getMovableNodeRatio, setRatio, setXYCordinatesOfNodeBasedOnCordinate, getMovableLineYCordinate, getMovableNodeRatioForButtonC } from '../features/movableNodesSlice'
 import useGeometrics from "../customHooks/useGeometrics";
 
 const ButtonComponent = () => {
-    const linePoints = useSelector(getLinePoints)
+    const linePoints = useSelector( getLinePoints )
+    const ratios = useSelector( getMovableNodeRatioForButtonC );
     // const { distanceBetween2Points, getLineAngle, getTranslatePoint } = useGeometrics();
     // const dispatch = useDispatch()
     // const linePoints = useSelector(getLinePoints);
@@ -18,7 +19,7 @@ const ButtonComponent = () => {
     // const e = distanceBetween2Points( [ linePoints.x, linePoints.y ], [ linePoints.x, linePoints.y ] ) / 15
     // const f = Math.sqrt( d * d + e * e )  
     let x1 = linePoints.x1;
-    let y1 = linePoints.x2;
+    let y1 = linePoints.y1;
     let x = linePoints.x;
     let y = linePoints.y;
     let x2 = linePoints.x2;
@@ -33,27 +34,15 @@ const ButtonComponent = () => {
                 top: '0px'
             }}>
             <div className='d-flex flex-direction-row justify-content-between'>
-                <Button className="ms-2 bg-danger"
-                >x1: {x1}</Button>
-                <Button className="ms-2 bg-danger"
-                >
-                    y1: {y1}</Button>
-                <Button className="ms-2 bg-success"
-                >
-                    x: {x}</Button>
-                <Button className="ms-2 bg-success"
-                >y: {y}</Button>
-                <Button className="ms-2 bg-dark"
-                >
-                    x2: {x2}</Button>
-                <Button className="ms-2 bg-dark"
-                >y2: {y2}</Button>
-                <Button className="ms-2"
-                >Ratio between Two lines is {c / f}</Button>
-                <Button className="ms-2"
-                >a Value {c}</Button>
-                <Button className="ms-2"
-                >b Value {f}</Button>
+                <Button className="ms-2 bg-danger">x1: { x1 }</Button>
+                <Button className="ms-2 bg-danger" > y1: { y1 }</Button>
+                <Button className="ms-2 bg-success">x: { x }</Button>
+                <Button className="ms-2 bg-success">y: { y }</Button>
+                <Button className="ms-2 bg-dark">x2: { x2 }</Button>
+                <Button className="ms-2 bg-dark">y2: { y2 }</Button>
+                <Button className="ms-2">Ratio between Two lines is { ratios }</Button>
+                <Button className="ms-2">a Value { c }</Button>
+                <Button className="ms-2" >b Value { f }</Button>
             </div>
         </div>
 

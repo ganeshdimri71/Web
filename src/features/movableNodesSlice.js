@@ -10,13 +10,11 @@ const initialState = {
         y2: 250,
     },
     ratio: 0.75,
-    movableLineYCordinate: 300,
     ratios: {
-        m1: 300,
-        m2: 400
+        m1: 3,
+        m2: 4
     },
-    // angle:
-
+    angle: 16.5873
 }
 
 const movableNodesSlice = createSlice({
@@ -30,40 +28,29 @@ const movableNodesSlice = createSlice({
         setXYCordinatesOfNodeB: (state, action) => {
             state.linePoints.x = action.payload.xPos
             state.linePoints.y = action.payload.yPos
-            // state.movableLineYCordinate = action.payload.yPos
         },
         setXYCordinatesOfNodeC: (state, action) => {
             state.linePoints.x2 = action.payload.xPos
-            state.linePoints.y2 = action.payload.yPos
+            state.linePoints.y2 = action.payload.yPos 
         },
-        setXYCordinatesOfNodeBBasedOnOffset: (state, action) => {
-            state.linePoints.x = (state.linePoints.x2 * state.ratios.m1 + state.linePoints.x1 * state.ratios.m2) / (state.ratios.m1 + state.ratios.m2)
-            state.linePoints.y = (state.linePoints.y2 * state.ratios.m1 + state.linePoints.y1 * state.ratios.m2) / (state.ratios.m1 + state.ratios.m2)
-            // state.linePoints.x = ( action.payload.xPointsOfMovableNodes)
-            // state.linePoints.y = ( action.payload.yPointsOfMovableNodes)
+        setXYCordinatesOfNodeBAgain: ( state, action ) => {
+            // console.log( 'action.payload.inXCoOfMvNode  action.payload.inYCoOfMvNode', action.payload.inXCoOfMvNode, action.payload.inYCoOfMvNode )
+            state.linePoints.x = action.payload.xPointsOfMovableNodes 
+            state.linePoints.y = action.payload.yPointsOfMovableNodes 
         },
-        setXYCordinatesOfNodeBAgain: (state, action) => {
-            state.linePoints.x = action.payload.xPointsOfMovableNodes
-            state.linePoints.y = action.payload.yPointsOfMovableNodes
-        },
-        setYcordinateOfMovableNode: (state, action) => {
-            state.linePoints.y = action.payload?.YcordinateOfMovableNodes
-        },
-        setRatio: (state, action) => {
-            state.ratio = action.payload.ratioBetweenTwoLines
-        },
-        setRatios: (state, action) => {
-            // state.ratio = action.payload.ratioCalculatedByPythagorousTheorem
-            state.ratios.m1 = action.payload.c;
-            state.ratios.m2 = action.payload.f;
+        setRatios: ( state, action ) => {
+            state.ratios.m1 = action.payload.m1;
+            state.ratios.m2 = action.payload.m2;
+            state.ratio = action.payload.ratio;
+            state.angle = action.payload.angle;
         },
     }
 });
 
 export const { setXYCordinatesOfNodeA, setXYCordinatesOfNodeB, setXYCordinatesOfNodeC, setRatios, setRatio, setXYCordinatesOfNodeBBasedOnOffset, setYcordinateOfMovableNode, setRatioInReduxAction, setXYCordinatesOfNodeBAgain } = movableNodesSlice.actions
 export const getLinePoints = state => state.movableNodesSlice.linePoints
-export const getMovableNodeRatio = state => state.movableNodesSlice.ratio
-export const getMovableNodeYRatio = state => state.movableNodesSlice.yRatio
-export const getMovableLineYCordinate = state => state.movableNodesSlice.movableLineYCordinate
-export const getRatios = state => state.movableNodesSlice.ratios
+export const getMovableNodeRatio = state => state.movableNodesSlice.ratios
+export const getMovableNodeRatioForButtonC = state => state.movableNodesSlice.ratio
+export const getAngle = state => state.movableNodesSlice.angle
+// export const getRatios = state => state.movableNodesSlice.ratios
 export default movableNodesSlice.reducer
