@@ -5,8 +5,8 @@ import { getLinePoints, getMovableNodeRatio, setRatio, setXYCordinatesOfNodeBase
 import useGeometrics from "../customHooks/useGeometrics";
 
 const ButtonComponent = () => {
-    const linePoints = useSelector( getLinePoints )
-    const ratios = useSelector( getMovableNodeRatioForButtonC );
+    const linePoints = useSelector(getLinePoints)
+    const ratios = useSelector(getMovableNodeRatioForButtonC);
     // const { distanceBetween2Points, getLineAngle, getTranslatePoint } = useGeometrics();
     // const dispatch = useDispatch()
     // const linePoints = useSelector(getLinePoints);
@@ -34,15 +34,15 @@ const ButtonComponent = () => {
                 top: '0px'
             }}>
             <div className='d-flex flex-direction-row justify-content-between'>
-                <Button className="ms-2 bg-danger">x1: { x1 }</Button>
-                <Button className="ms-2 bg-danger" > y1: { y1 }</Button>
-                <Button className="ms-2 bg-success">x: { x }</Button>
-                <Button className="ms-2 bg-success">y: { y }</Button>
-                <Button className="ms-2 bg-dark">x2: { x2 }</Button>
-                <Button className="ms-2 bg-dark">y2: { y2 }</Button>
-                <Button className="ms-2">Ratio between Two lines is { ratios }</Button>
-                <Button className="ms-2">a Value { c }</Button>
-                <Button className="ms-2" >b Value { f }</Button>
+                <Button className="ms-2 bg-danger">x1: {x1}</Button>
+                <Button className="ms-2 bg-danger" > y1: {y1}</Button>
+                <Button className="ms-2 bg-success">x: {x}</Button>
+                <Button className="ms-2 bg-success">y: {y}</Button>
+                <Button className="ms-2 bg-dark">x2: {x2}</Button>
+                <Button className="ms-2 bg-dark">y2: {y2}</Button>
+                <Button className="ms-2">Ratio between Two lines is {ratios}</Button>
+                <Button className="ms-2">m1 Value {c}</Button>
+                <Button className="ms-2" >m2  Value {f}</Button>
             </div>
         </div>
 
