@@ -99,9 +99,10 @@ const App = () => {
     const offset_y = (y - dragStartPos[1])
     const offset_x = (x - dragStartPos[0])
     if (color == 'red') {
+      
       // const XandYCordinatesOfMovableNodes = transformVectorMaintainingProportions( [ linePoints.x1, linePoints.y1 ], [ linePoints.x, linePoints.y ], [ linePoints.x2, linePoints.y2 ], [ offset_x, offset_y ] )
       // console.log( 'XandYCordinatesOfMovableNodes', XandYCordinatesOfMovableNodes )
-      // console.log('angle', angle)
+      console.log('angle', angle)
       // console.log( 'm1,m2', ratios.m1, ratios.m2 )
       dispatch(setXYCordinatesOfNodeA({ xPos: x, yPos: y, }))
       // dispatch( setXYCordinatesOfNodeBAgain( { xPointsOfMovableNodes: XandYCordinatesOfMovableNodes[ 0 ], yPointsOfMovableNodes: XandYCordinatesOfMovableNodes[ 1 ], inXCoOfMvNode: 0, inYCoOfMvNode: 0 } ) );
