@@ -111,17 +111,15 @@ const App = () => {
       // // const jerkPoints = section( linePoints.x1, linePoints.x2, linePoints.y1, linePoints.y2, ratios.m1, ratios.m2 )
       const pointsRotation = geometric.pointRotate([xCoOfMoNode, yCoOfMoNode], angle, [linePoints.x1, linePoints.y1])
       // dispatch( setXYCordinatesOfNodeBAgain( { xPointsOfMovableNodes: pointsRotation[ 0 ], yPointsOfMovableNodes: pointsRotation[ 1 ] } ) )
-      if (initialRender == 0) {
-        dispatch(setXYCordinatesOfNodeBAgain({
-          xPointsOfMovableNodes: pointsRotation[0], yPointsOfMovableNodes: pointsRotation[1], inXCoOfMvNode: 0, inYCoOfMvNode: 0
-        }))
-        setInXCoOfMvNode(linePoints.x)
-        setInYCoOfMvNode(linePoints.y)
-      }
-      else dispatch(setXYCordinatesOfNodeBAgain({ xPointsOfMovableNodes: pointsRotation[0], yPointsOfMovableNodes: pointsRotation[1], inXCoOfMvNode: 0, inYCoOfMvNode: 0, conditionVariable: false }));
+      // if (initialRender == 0) {
+        dispatch(setXYCordinatesOfNodeBAgain({xPointsOfMovableNodes: pointsRotation[0], yPointsOfMovableNodes: pointsRotation[1]}))
+      //   setInXCoOfMvNode(linePoints.x)
+      //   setInYCoOfMvNode(linePoints.y)
+      // // }
+      // else dispatch(setXYCordinatesOfNodeBAgain({ xPointsOfMovableNodes: pointsRotation[0], yPointsOfMovableNodes: pointsRotation[1], inXCoOfMvNode: 0, inYCoOfMvNode: 0, conditionVariable: false }));
       // console.log('linePoints.x,linePoints.y', linePoints.x, linePoints.y)
       // dispatch( setXYCordinatesOfNodeBAgain( { xPointsOfMovableNodes: XandYCordinatesOfMovableNodes[ 0 ], yPointsOfMovableNodes: XandYCordinatesOfMovableNodes[ 1 ], inXCoOfMvNode: 0, inYCoOfMvNode: 0 } ) );
-      setInitialRender(prevState => prevState + 1)
+      // setInitialRender(prevState => prevState + 1)
       // dispatch( setXYCordinatesOfNodeBBasedOnOffset() );
     } else if (color == 'black') {
       dispatch(setXYCordinatesOfNodeC({ xPos: x, yPos: y, }));
