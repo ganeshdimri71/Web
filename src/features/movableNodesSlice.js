@@ -58,10 +58,8 @@ const movableNodesSlice = createSlice({
             // const differenceOne = Math.abs(state.temporaryYCordinateOfMovableNodes - action.payload.yPointsOfMovableNodes)
             // console.log(' difference, differenceOne', difference, differenceOne)
             // console.log('state.linePoints.x state.linePoints.y', state.linePoints.x, state.linePoints.y)
-            state.linePoints.x = action.payload.xPointsOfMovableNodes
-            //  + state?.difference
-            state.linePoints.y = action.payload.yPointsOfMovableNodes 
-            // + state?.differenceOne
+            state.linePoints.x = action.payload.xPointsOfMovableNodes + state?.difference
+            state.linePoints.y = action.payload.yPointsOfMovableNodes + state?.differenceOne
         },
         // setXYCordinatesOfNodeBAgainAfterJerk: (state, action) => {
         //     if (action.payload.xDifference != undefined && action.payload.xDifference != undefined) {
