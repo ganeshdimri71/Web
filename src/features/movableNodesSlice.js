@@ -41,16 +41,16 @@ const movableNodesSlice = createSlice({
         },
         setXYCordinatesOfNodeBAgain: (state, action) => {
             // console.log( 'action.payload.inXCoOfMvNode  action.payload.inYCoOfMvNode', action.payload.inXCoOfMvNode, action.payload.inYCoOfMvNode )
-            // if (state.conditionVariable == true) {
-            //     console.log('state.linePoints.x state.linePoints.y', state.linePoints.x, state.linePoints.y)
-            //     state.temporaryXCordinateOfMovableNodes = state.linePoints.x
-            //     state.temporaryYCordinateOfMovableNodes = state.linePoints.y
-            //     state.difference = (state.temporaryXCordinateOfMovableNodes - action.payload.xPointsOfMovableNodes)
-            //     state.differenceOne = (state.temporaryYCordinateOfMovableNodes - action.payload.yPointsOfMovableNodes)
-            //     state.conditionVariable = action.payload.conditionVariable
-            //     console.log(' difference, differenceOne', state.difference, state.differenceOne)
-            //     console.log('I am running...!')
-            // }
+            if (state.conditionVariable == true) {
+                console.log('state.linePoints.x state.linePoints.y', state.linePoints.x, state.linePoints.y)
+                state.temporaryXCordinateOfMovableNodes = state.linePoints.x
+                state.temporaryYCordinateOfMovableNodes = state.linePoints.y
+                state.difference = (state.temporaryXCordinateOfMovableNodes - action.payload.xPointsOfMovableNodes)
+                state.differenceOne = (state.temporaryYCordinateOfMovableNodes - action.payload.yPointsOfMovableNodes)
+                state.conditionVariable = action.payload.conditionVariable
+                console.log(' difference, differenceOne', state.difference, state.differenceOne)
+                console.log('I am running...!')
+            }
             // console.log('state.linePoints.x state.linePoints.y', state.linePoints.x, state.linePoints.y)
             // state.linePoints.x = action.payload.xPointsOfMovableNodes
             // state.linePoints.y = action.payload.yPointsOfMovableNodes
@@ -58,8 +58,8 @@ const movableNodesSlice = createSlice({
             // const differenceOne = Math.abs(state.temporaryYCordinateOfMovableNodes - action.payload.yPointsOfMovableNodes)
             // console.log(' difference, differenceOne', difference, differenceOne)
             // console.log('state.linePoints.x state.linePoints.y', state.linePoints.x, state.linePoints.y)
-            state.linePoints.x = action.payload.xPointsOfMovableNodes + state?.difference
-            state.linePoints.y = action.payload.yPointsOfMovableNodes + state?.differenceOne
+            state.linePoints.x = action.payload.xPointsOfMovableNodes + state.difference
+            state.linePoints.y = action.payload.yPointsOfMovableNodes + state.differenceOne
         },
         // setXYCordinatesOfNodeBAgainAfterJerk: (state, action) => {
         //     if (action.payload.xDifference != undefined && action.payload.xDifference != undefined) {
