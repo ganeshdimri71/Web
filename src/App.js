@@ -53,10 +53,7 @@ const App = () => {
     let y = ((n * y1) + (m * y2)) /
       (m + n);
     return [x, y]
-
-
     // Printing result
-    document.write("(" + x + ", " + y + ")");
   }
   const getAngleOfLine = (line) => {
     let angle = geometric.lineAngle(line);
@@ -105,6 +102,7 @@ const App = () => {
       console.log('angle', angle)
       // console.log( 'm1,m2', ratios.m1, ratios.m2 )
       dispatch(setXYCordinatesOfNodeA({ xPos: x, yPos: y, }))
+      console.log(calcangle(linePoints.x1, linePoints.y1, linePoints.x, linePoints.y, linePoints.x, linePoints.y, linePoints.x2, linePoints.y2))
       // dispatch( setXYCordinatesOfNodeBAgain( { xPointsOfMovableNodes: XandYCordinatesOfMovableNodes[ 0 ], yPointsOfMovableNodes: XandYCordinatesOfMovableNodes[ 1 ], inXCoOfMvNode: 0, inYCoOfMvNode: 0 } ) );
       // console.log( 'linePoints.x,linePoints.y', linePoints.x, linePoints.y )
       const xCoOfMoNode = (linePoints.x2 * ratios.m1 + linePoints.x1 * ratios.m2) / (ratios.m1 + ratios.m2)
